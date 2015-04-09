@@ -1,5 +1,5 @@
 # fb-opt-stocks
 
-Author: Michael Pratt
+[Fritbot](https://github.com/Urthen/fritbot) Stocks Module
 
-A lovely Fritbot module.
+Returns current stock price and diff from closing. Data from Google Finance.

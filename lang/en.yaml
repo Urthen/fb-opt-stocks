@@ -1,0 +1,5 @@
+stocks_symbol_invalid: You need to provide a valid stock symbol.
+stocks_symbol_value: '%s closed yesterday at $%s; opened today at $%s and is currently at $%s (%d% from close)'
+stocks_response: |+
+  Stock prices for %s:
+  %s

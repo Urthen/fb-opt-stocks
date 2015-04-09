@@ -2,9 +2,10 @@ var querystring = require('querystring'),
     request = require('request');
 
 function getStocks(route, args) {
+    var i18n = this.i18n;
 
     if (args.length === 0) {
-        route.send('Perhaps you should provide a stock symbol... ?');
+        route.send('?stocks_symbol_invalid');
         return;
     }
 
@@ -28,15 +29,25 @@ function getStocks(route, args) {
             if (response.length > 0) {
                 var stockValues = [];
 
-                for (var index in response) {
-                    stockValues.push('     ' + response[index].name + ' closed yesterday at $' + (parseFloat(response[index].l) - parseFloat(response[index].c)).toFixed(2).toString() + '; opened today at $' + response[index].op + ' and is currently at $' + response[index].l + ' (' + response[index].cp + '% from close)');
-                }
+                try {
+                    for (var index in response) {
+                        var values = [response[index].name,
+                            (parseFloat(response[index].l) - parseFloat(response[index].c)).toFixed(2).toString(),
+                            response[index].op,
+                            response[index].l,
+                            response[index].cp];
 
-                route.send('Stock prices for ' + symbols.join(', ') + ':\n' + stockValues.join('\n'));
+                        stockValues.push(i18n.doTemplate('stocks_symbol_value', values));
+                    }
+                    route.send('?stocks_response', symbols.join(', '), stockValues.join('\n'));
+                } catch (e) {
+                    console.log(e.stack);
+                    route.send('?generic_error');
+                }
             }
 
         } else {
-            route.send("Erm... something went very wrong. Maybe that's not a stock symbol?");
+            route.send('?stocks_symbol_invalid');
         }
 
     }.bind(this));
